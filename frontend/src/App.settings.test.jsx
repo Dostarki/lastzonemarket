@@ -4,6 +4,11 @@ import { PREFERENCES_KEY } from './game/preferences';
 import { GameApp } from './App';
 
 jest.mock('react-router-dom', () => ({ BrowserRouter: ({ children }) => children, useLocation: () => ({ pathname: '/settings' }), useNavigate: () => jest.fn() }), { virtual: true });
+jest.mock('@rainbow-me/rainbowkit', () => ({
+  useConnectModal: () => ({ connectModalOpen: false }),
+  useAccountModal: () => ({ accountModalOpen: false }),
+  useChainModal: () => ({ chainModalOpen: false }),
+}));
 
 const rendererInstances = [];
 jest.mock('./game/renderer', () => ({ GameRenderer: jest.fn().mockImplementation(function GameRenderer(container, world, error, onZoomChange) { const instance = { setQuality: jest.fn(), setZoom: jest.fn(), setMode: jest.fn(), setBlocked: jest.fn(), dispose: jest.fn(), onZoomChange }; rendererInstances.push(instance); return instance; }) }));

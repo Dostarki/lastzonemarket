@@ -16,7 +16,8 @@ import {
 import { toast } from 'sonner';
 import { apiClient } from '../lib/apiClient';
 import { useAuth } from '../lib/authContext';
-import { useAccount, useSendTransaction, useSwitchChain } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
+import { useNativePayment } from '../hooks/useNativePayment';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Dialog, DialogContent, DialogTitle } from './ui/dialog';
 import { MaterialThumbnail } from './CraftPanel';
@@ -65,10 +66,10 @@ const apiError = (error, fallback) => ({
 
 export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
   const { status: authStatus, user, loginWithWallet } = useAuth();
-  const { address: walletAddress, chainId } = useAccount();
+  const { address: walletAddress, chainId, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { switchChain } = useSwitchChain();
-  const { sendTransactionAsync } = useSendTransaction();
+  const { sendNativePayment } = useNativePayment();
   const [activeTab, setActiveTab] = useState('packages');
   const [catalog, setCatalog] = useState(null);
   const [economy, setEconomy] = useState(null);
@@ -89,6 +90,10 @@ export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
   const requestEpoch = useRef(0);
   const accountKey = authStatus === 'authenticated' ? user?.address?.toLowerCase() : '';
   const walletKey = walletAddress?.toLowerCase() || '';
+
+  useEffect(() => {
+    if (open && !isConnected) onClose();
+  }, [open, isConnected, onClose]);
 
   const fetchAllData = useCallback(async () => {
     const requestId = ++requestEpoch.current;
@@ -191,9 +196,9 @@ export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
   };
 
   const payOrder = async () => {
-    if (!checkoutOrder || !sendTransactionAsync) return;
+    if (!checkoutOrder || loading) return;
     const quote = checkoutOrder.quote;
-    if (!quote || chainId !== quote.chain_id || user?.address?.toLowerCase() !== walletAddress?.toLowerCase()) {
+    if (!quote || quote.chain_id !== 4663 || chainId !== 4663 || user?.address?.toLowerCase() !== walletAddress?.toLowerCase()) {
       setCheckoutStatus('Wallet account or network changed. Reconnect the signed-in account and try again.');
       return;
     }
@@ -203,10 +208,7 @@ export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
     }
     setLoading(true);
     try {
-      const txHash = checkoutOrder.tx_hash || await sendTransactionAsync({
-          account: walletAddress, to: quote.recipient, value: BigInt(quote.amount_wei),
-          data: `0x${quote.calldata}`, chainId: quote.chain_id,
-        });
+      const txHash = checkoutOrder.tx_hash || await sendNativePayment(quote, walletAddress);
       setCheckoutOrder({ ...checkoutOrder, tx_hash: txHash });
       savePendingOrder(accountKey, checkoutOrder.order_id, txHash);
       setCheckoutStatus('Payment submitted. Waiting for chain confirmation…');
@@ -294,7 +296,7 @@ export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
     } finally { setLoading(false); }
   };
 
-  if (!open) return null;
+  if (!open || !isConnected) return null;
 
   return (
       <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
@@ -314,13 +316,14 @@ export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
           </div>
 
           <div className="ogm-wallet-status">
+            <span data-testid="market-connected-wallet" title={walletAddress}>{walletAddress?.slice(0, 6)}…{walletAddress?.slice(-4)}</span>
             {economy && (
               <div className="ogm-gold-display">
                 <Coins size={16} />
                 <span>{economy.gold?.toLocaleString('en-US') || 0} GOLD</span>
               </div>
             )}
-          <button className="ogm-close-btn" onClick={onClose} aria-label="Close market">
+          <button className="ogm-close-btn" onClick={onClose} aria-label="Close market" data-testid="market-close-button">
               <X size={20} />
             </button>
           </div>
@@ -381,7 +384,8 @@ export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
                 const item = catalog[sku];
                 if (!item) return null;
                 return (
-                  <button key={sku} type="button" className={`ogm-package-card ${selectedSku === sku ? 'selected' : ''}`} data-testid={`card-${sku}`} onClick={() => setSelectedSku(sku)} aria-pressed={selectedSku === sku}>
+                  <article key={sku} className={`ogm-package-card with-checkout ${selectedSku === sku ? 'selected' : ''}`} data-testid={`package-${sku}`}>
+                  <button type="button" className="ogm-package-select" data-testid={`card-${sku}`} onClick={() => setSelectedSku(sku)} aria-pressed={selectedSku === sku}>
                     <span className={`ogm-crate-mark ${sku}`}><PackageCrate sku={sku} /><span className="ogm-preview-strip">{manifestRows(item).slice(1, 4).map(([, , id]) => <span key={id}>{itemThumbnail(id)}</span>)}</span></span>
 
                     <div className="ogm-card-header">
@@ -398,6 +402,10 @@ export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
                     <p className="ogm-card-details">{itemDescription(item)}</p>
 
                   </button>
+                  <button type="button" className="ogm-buy-btn ogm-card-buy" data-testid={`buy-${sku}`}
+                    disabled={selectedSku !== sku || loading || !catalog?.capabilities?.purchase_enabled || authStatus !== 'authenticated' || chainId !== 4663 || user?.address?.toLowerCase() !== walletAddress?.toLowerCase()}
+                    onClick={() => handlePurchase(sku)}>{selectedSku === sku ? `BUY ${item.usd_str}` : 'SELECT PACKAGE'} <ChevronRight size={15} /></button>
+                  </article>
                 );
               })}
             </div>
@@ -609,9 +617,9 @@ export const OffgameMarketModal = ({ open, onClose, onRefreshProfile }) => {
               <dt>Recipient</dt><dd className="ogm-address">{checkoutOrder.quote.recipient}</dd>
               <dt>Quote expires</dt><dd>{new Date(checkoutOrder.quote.expires_at).toLocaleTimeString('en-US')}</dd>
             </dl>
-            <p>Review the amount and recipient before approving in your wallet. The transfer includes an order marker for verification.</p>
+            <p data-testid="market-payment-disclosure">Review the amount and recipient before approving the ETH transfer. Network fees are additional.</p>
             {checkoutStatus && <p role="status">{checkoutStatus}</p>}
-            {!checkoutOrder.tx_hash && Date.now() >= new Date(checkoutOrder.quote.expires_at).getTime() ? <button className="ogm-buy-btn" disabled={loading} onClick={renewQuote}>Refresh expired quote</button> : <button className="ogm-buy-btn" disabled={loading} onClick={payOrder}>{loading ? 'Waiting for payment…' : checkoutOrder.tx_hash ? 'Verify existing payment' : 'Approve payment in wallet'}</button>}
+            {!checkoutOrder.tx_hash && (Date.now() >= new Date(checkoutOrder.quote.expires_at).getTime() || checkoutOrder.quote.payment_mode !== 'native_transfer') ? <button className="ogm-buy-btn" data-testid="market-refresh-quote-button" disabled={loading} onClick={renewQuote}>Refresh quote</button> : <button className="ogm-buy-btn" data-testid="market-approve-payment-button" disabled={loading} onClick={payOrder}>{loading ? 'Waiting for payment…' : checkoutOrder.tx_hash ? 'Verify existing payment' : 'Approve payment in wallet'}</button>}
             <button className="ogm-cancel-checkout" disabled={loading} onClick={() => { setCheckoutOrder(null); setCheckoutStatus(''); }}>Cancel checkout</button>
           </div>
         )}
@@ -660,9 +668,15 @@ const itemThumbnail = (id) => {
   if (/_t[1-3]$/.test(id)) return <MaterialThumbnail id={id} tier={Number(id.slice(-1))} compact />;
   return <Package size={18} aria-hidden="true" />;
 };
-const PackageCrate = ({ sku }) => <svg className={`ogm-package-crate ${sku}`} viewBox="0 0 96 80" aria-hidden="true"><path d="M9 22 47 5l40 17-39 17z"/><path d="M9 22v38l39 15V39z"/><path d="M48 39 87 22v38L48 75z"/><path d="M47 5v33M9 22l39 17 39-17M48 39v36"/><path d="m24 15 40 18M70 14 31 33"/></svg>;
+const PackageCrate = ({ sku, detail = false }) => <img
+  className={`ogm-package-img ${sku}`}
+  src={`/images/crates/${sku}.webp`}
+  alt={`${SKU_NAMES[sku]} tactical case`}
+  width="512" height="512" decoding="async"
+  data-testid={`package-case-${detail ? 'detail-' : ''}${sku}`}
+/>;
 const PackageDetails = ({ item, disabled, onPurchase }) => <aside className="ogm-package-detail">
-  <div className="ogm-crate-mark large"><PackageCrate sku={item.sku} /></div>
+  <div className="ogm-crate-mark large"><PackageCrate sku={item.sku} detail /></div>
   <span className="ogm-eyebrow">GUARANTEED CONTENTS</span><h3>{itemName(item)}</h3>
   <p>{itemDescription(item)}</p>
   <ul className="ogm-full-manifest">{manifestRows(item).map(([name, qty, id]) => <li key={name}><span className="ogm-content-thumb">{itemThumbnail(id)}<span>{name}</span></span><strong>×{Number(qty).toLocaleString('en-US')}</strong></li>)}</ul>

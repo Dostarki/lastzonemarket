@@ -6,22 +6,31 @@ and secure HTTP session management for EVM wallets.
 
 from datetime import datetime, timezone, timedelta
 import logging
+import os
 import re
 import secrets
 from typing import Dict, Any, Optional
+from urllib.parse import urlsplit
 from eth_account import Account
 from eth_account.messages import encode_defunct
+from chain_config import CHAIN_ID
+from access_payments import has_paid_access
 
 from player_accounts import to_checksum_address, get_account_by_address, get_player_progress, create_or_update_profile, sync_db_to_file
 
 log = logging.getLogger('deadzone.auth')
 
 STATEMENT = "Sign in to DEADZONE Westfall with your Robinhood Chain wallet."
-SUPPORTED_CHAINS = {4663, 46630}  # Robinhood Chain Mainnet (4663) and Testnet (46630)
+SUPPORTED_CHAINS = {CHAIN_ID}
 
 
-async def create_challenge(db, address: str, chain_id: int = 4663, domain: Optional[str] = None, uri: Optional[str] = None) -> Dict[str, Any]:
+async def create_challenge(db, address: str, chain_id: int = CHAIN_ID, domain: Optional[str] = None, uri: Optional[str] = None) -> Dict[str, Any]:
     """Generates an atomic, single-use SIWE challenge nonce."""
+    if chain_id not in SUPPORTED_CHAINS:
+        raise ValueError('Only Robinhood Chain Mainnet (4663) is supported.')
+    allowed_origins = {origin.strip().rstrip('/') for origin in os.environ['CORS_ORIGINS'].split(',')}
+    if not uri or uri.rstrip('/') not in allowed_origins or not domain or urlsplit(uri).netloc != domain:
+        raise ValueError('Sign-in domain and URI must match an allowed application origin.')
     acc_id = address.lower()
     checksum_addr = to_checksum_address(acc_id)
     nonce = secrets.token_hex(16)
@@ -40,8 +49,8 @@ async def create_challenge(db, address: str, chain_id: int = 4663, domain: Optio
         'consumed': False,
     }
 
-    eff_domain = domain or "localhost:3000"
-    eff_uri = uri or ("http://" + eff_domain if not eff_domain.startswith("http") else eff_domain)
+    eff_domain = domain
+    eff_uri = uri
 
     siwe_text = (
         f"{eff_domain} wants you to sign in with your Ethereum account:\n"
@@ -55,8 +64,8 @@ async def create_challenge(db, address: str, chain_id: int = 4663, domain: Optio
     )
 
 
+    challenge_doc['message'] = siwe_text
     await db.auth_challenges.insert_one(challenge_doc)
-    log.info(f"Persisted challenge doc for nonce={nonce}, addr={acc_id}")
 
     return {
 
@@ -76,13 +85,13 @@ def parse_siwe_message(message: str) -> Dict[str, Any]:
     chain_match = re.search(r'Chain ID:\s*([0-9]+)', message)
     uri_match = re.search(r'URI:\s*([^\n\r]+)', message)
 
-    if not addr_match or not nonce_match:
-        raise ValueError('Invalid SIWE message structure: missing address or nonce.')
+    if not addr_match or not nonce_match or not chain_match:
+        raise ValueError('Invalid SIWE message structure: missing address, nonce, or chain ID.')
 
     return {
         'address': addr_match.group(1),
         'nonce': nonce_match.group(1),
-        'chainId': int(chain_match.group(1)) if chain_match else 4663,
+        'chainId': int(chain_match.group(1)),
         'uri': uri_match.group(1) if uri_match else ''
     }
 
@@ -93,6 +102,8 @@ async def verify_signature(db, message: str, signature: str) -> Dict[str, Any]:
     claimed_address = parsed['address'].lower()
     nonce = parsed['nonce']
     chain_id = parsed['chainId']
+    if chain_id not in SUPPORTED_CHAINS:
+        raise ValueError('Only Robinhood Chain Mainnet (4663) is supported.')
 
     # 1. Cryptographic address recovery
     try:
@@ -107,10 +118,11 @@ async def verify_signature(db, message: str, signature: str) -> Dict[str, Any]:
         raise ValueError('Recovered address does not match claimed address.')
 
     # 2. Challenge validation and atomic consumption
-    challenge = await db.auth_challenges.find_one({'nonce': nonce})
-    log.info(f'Verifying SIWE: parsed nonce={nonce}, addr={claimed_address}, challenge_doc={challenge}')
+    challenge = await db.auth_challenges.find_one({'nonce': nonce}, {'_id': 0})
     if not challenge:
         raise ValueError('Challenge nonce not found.')
+    if challenge.get('chain_id') != CHAIN_ID or challenge.get('message') != message:
+        raise ValueError('Signed message does not match the mainnet challenge. Request a new challenge.')
 
     if challenge.get('account_id') and challenge['account_id'] != claimed_address:
         log.warning(f"Nonce account mismatch: expected {challenge.get('account_id')} vs {claimed_address}")
@@ -126,7 +138,10 @@ async def verify_signature(db, message: str, signature: str) -> Dict[str, Any]:
         raise ValueError('Challenge nonce has expired. Please sign in again.')
 
     # Atomically consume nonce to prevent replay
-    await db.auth_challenges.update_one({'nonce': nonce}, {'$set': {'consumed': True}})
+    consumed = await db.auth_challenges.update_one(
+        {'nonce': nonce, 'consumed': False, 'chain_id': CHAIN_ID}, {'$set': {'consumed': True}})
+    if consumed.modified_count != 1:
+        raise ValueError('Challenge nonce has already been consumed.')
 
     # 3. Create persistent authenticated session
     session_token = secrets.token_urlsafe(36)
@@ -158,6 +173,7 @@ async def verify_signature(db, message: str, signature: str) -> Dict[str, Any]:
         'sessionToken': session_token,
         'address': checksum_addr,
         'hasProfile': True,
+        'paid_access': await has_paid_access(db, claimed_address),
         'account': account,
         'progress': progress,
     }
@@ -168,7 +184,7 @@ async def get_session_account(db, session_token: str) -> Optional[Dict[str, Any]
     """Validates session token and returns authenticated player account."""
     if not session_token:
         return None
-    session = await db.auth_sessions.find_one({'session_token': session_token})
+    session = await db.auth_sessions.find_one({'session_token': session_token, 'chain_id': CHAIN_ID}, {'_id': 0})
     if not session:
         return None
 
@@ -186,7 +202,8 @@ async def get_session_account(db, session_token: str) -> Optional[Dict[str, Any]
         'account': account,
         'progress': progress,
         'address': session['address'],
-        'account_id': session['account_id']
+        'account_id': session['account_id'],
+        'paid_access': await has_paid_access(db, session['account_id']),
     }
 
 

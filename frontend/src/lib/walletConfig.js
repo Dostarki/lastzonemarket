@@ -1,73 +1,36 @@
-import { defineChain } from "viem";
-import { createConfig, http } from "wagmi";
-import { metaMask, injected } from "wagmi/connectors";
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { coinbaseWallet, injectedWallet, rainbowWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets';
+import { createConfig, http } from 'wagmi';
+import { defineChain } from 'viem';
+import { metaMaskInjectedWallet } from './metaMaskInjectedWallet';
+
+const projectId = process.env.REACT_APP_WALLETCONNECT_PROJECT_ID;
+const chainId = Number(process.env.REACT_APP_ROBINHOOD_CHAIN_ID);
+const rpcUrl = process.env.REACT_APP_ROBINHOOD_RPC_URL;
+const explorerUrl = process.env.REACT_APP_ROBINHOOD_EXPLORER_URL;
+const appUrl = process.env.REACT_APP_BACKEND_URL;
+
+if (!projectId || !rpcUrl || !explorerUrl || !appUrl || chainId !== 4663) {
+  throw new Error('Wallet configuration requires a Reown project ID and Robinhood Mainnet (4663) environment settings.');
+}
 
 export const robinhoodMainnet = defineChain({
-  id: 4663,
-  name: "Robinhood Chain",
-  nativeCurrency: {
-    name: "Ether",
-    symbol: "ETH",
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://rpc.mainnet.chain.robinhood.com"],
-    },
-    public: {
-      http: ["https://rpc.mainnet.chain.robinhood.com"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Robinhood Explorer",
-      url: "https://explorer.mainnet.chain.robinhood.com",
-    },
-  },
+  id: chainId,
+  name: 'Robinhood Chain',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: { default: { http: [rpcUrl] } },
+  blockExplorers: { default: { name: 'Robinhood Explorer', url: explorerUrl } },
 });
 
-export const robinhoodTestnet = defineChain({
-  id: 46630,
-  name: "Robinhood Testnet",
-  nativeCurrency: {
-    name: "Testnet Ether",
-    symbol: "ETH",
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://rpc.testnet.chain.robinhood.com"],
-    },
-    public: {
-      http: ["https://rpc.testnet.chain.robinhood.com"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Robinhood Testnet Explorer",
-      url: "https://explorer.testnet.chain.robinhood.com",
-    },
-  },
-  testnet: true,
-});
+const connectors = connectorsForWallets([
+  { groupName: 'Wallets', wallets: [metaMaskInjectedWallet, rainbowWallet, coinbaseWallet, walletConnectWallet] },
+  { groupName: 'Browser wallets', wallets: [injectedWallet] },
+], { appName: 'LastZHood', appUrl, projectId });
 
 export const wagmiConfig = createConfig({
-  chains: [robinhoodMainnet, robinhoodTestnet],
-  connectors: [
-    metaMask({
-      dappMetadata: {
-        name: "LastZHood",
-        url: typeof window !== "undefined" ? window.location.origin : "http://localhost:3000",
-      },
-    }),
-    injected({
-      target: "metaMask",
-    }),
-    injected(),
-  ],
-  transports: {
-    [robinhoodMainnet.id]: http(),
-    [robinhoodTestnet.id]: http(),
-  },
+  chains: [robinhoodMainnet],
+  connectors,
+  transports: { [robinhoodMainnet.id]: http(rpcUrl) },
+  multiInjectedProviderDiscovery: true,
   ssr: false,
 });

@@ -27,6 +27,9 @@ from inventory import equip_weapon, inventory_snapshot
 from loot import use_heal_item, use_consumable, allocate_stat, craft_upgrade
 from player_accounts import setup_account_indexes, get_player_progress, save_player_progress, DEFAULT_STATS, create_or_update_profile, sync_db_to_file
 from player_auth import create_challenge, verify_signature, get_session_account, logout
+from chain_config import CHAIN_ID
+from access_payments import ensure_access_indexes, has_paid_access
+from access_routes import access_router
 
 load_dotenv(Path(__file__).parent / '.env')
 client = AsyncIOMotorClient(os.environ['MONGO_URL'])
@@ -105,6 +108,7 @@ async def lifespan(app):
     await db.scores.create_index([('score', -1)])
     await setup_admin(db)
     await setup_account_indexes(db)
+    await ensure_access_indexes(db)
     saved = await db.game_settings.find_one({'id': 'world'}, {'_id': 0})
     if saved:
         apply_settings(game, GameSettings.model_validate(saved['settings']).model_dump())
@@ -121,6 +125,7 @@ async def lifespan(app):
 
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(access_router(db))
 app.add_middleware(CORSMiddleware, allow_origins=os.environ['CORS_ORIGINS'].split(','), allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.include_router(create_admin_router(db, game))
@@ -131,7 +136,7 @@ from typing import Optional
 
 class ChallengeRequest(BaseModel):
     address: str
-    chain_id: Optional[int] = 4663
+    chain_id: int = CHAIN_ID
     domain: Optional[str] = None
     uri: Optional[str] = None
 
@@ -140,6 +145,25 @@ class ChallengeRequest(BaseModel):
 class VerifyRequest(BaseModel):
     message: str
     signature: str
+
+
+class ChallengeResponse(BaseModel):
+    nonce: str
+    issuedAt: str
+    address: str
+    statement: str
+    message: str
+
+
+class WalletAuthResponse(BaseModel):
+    authenticated: bool
+    token: str
+    sessionToken: str
+    address: str
+    hasProfile: bool
+    account: dict
+    progress: dict
+    paid_access: bool
 
 
 class ProfileRequest(BaseModel):
@@ -195,19 +219,17 @@ async def leaderboard():
     return await db.scores.find({}, {'_id': 0}).sort('score', -1).limit(20).to_list(20)
 
 
-@app.post('/api/auth/challenge')
+@app.post('/api/auth/challenge', response_model=ChallengeResponse)
 async def auth_challenge(body: ChallengeRequest):
-    return await create_challenge(
-        db,
-        body.address,
-        chain_id=body.chain_id or 4663,
-        domain=body.domain,
-        uri=body.uri
-    )
+    try:
+        return await create_challenge(
+            db, body.address, chain_id=body.chain_id, domain=body.domain, uri=body.uri)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
 
 
 
-@app.post('/api/auth/verify')
+@app.post('/api/auth/verify', response_model=WalletAuthResponse)
 async def auth_verify(body: VerifyRequest, response: Response):
     try:
         res = await verify_signature(db, body.message, body.signature)
@@ -215,6 +237,7 @@ async def auth_verify(body: VerifyRequest, response: Response):
             key='deadzone_session',
             value=res['sessionToken'],
             httponly=True,
+            secure=True,
             samesite='lax',
             max_age=7*86400
         )
@@ -229,7 +252,7 @@ async def auth_me(request: Request):
     user = await get_session_account(db, token)
     if not user:
         return {'authenticated': False}
-    return {'authenticated': True, 'address': user['address'], 'account': user['account'], 'progress': user['progress']}
+    return {'authenticated': True, 'address': user['address'], 'account': user['account'], 'progress': user['progress'], 'paid_access': user['paid_access']}
 
 
 @app.post('/api/auth/profile')
@@ -241,7 +264,7 @@ async def auth_profile(body: ProfileRequest, request: Request):
     try:
         account = await create_or_update_profile(db, user['account_id'], body.nickname, body.skin)
         progress = await get_player_progress(db, user['account_id'])
-        return {'success': True, 'account': account, 'progress': progress}
+        return {'success': True, 'account': account, 'progress': progress, 'paid_access': user['paid_access']}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -639,7 +662,7 @@ async def create_market_order(body: CreateOrderRequest, request: Request):
 @app.post('/api/offgame-market/orders/{order_id}/quote')
 async def renew_market_order_quote(order_id: str, request: Request):
     account_id, _, _ = await _get_auth_target(request)
-    order = await db.purchase_orders.find_one({'order_id': order_id, 'account_id': account_id}, {'_id': 0})
+    order = await db.purchase_orders.find_one({'order_id': order_id, 'account_id': account_id, 'kind': {'$ne': 'access'}}, {'_id': 0})
     if not order:
         raise HTTPException(status_code=404, detail='ORDER_NOT_FOUND')
     if order.get('tx_hash') or order.get('status') not in ('created', 'awaiting_payment'):
@@ -659,7 +682,7 @@ async def submit_market_order(order_id: str, body: SubmitOrderRequest, request: 
     account_id, live_target, is_live = await _get_auth_target(request)
     if not body.tx_hash:
         raise HTTPException(status_code=400, detail='TRANSACTION_HASH_REQUIRED')
-    order = await db.purchase_orders.find_one({'order_id': order_id, 'account_id': account_id}, {'_id': 0})
+    order = await db.purchase_orders.find_one({'order_id': order_id, 'account_id': account_id, 'kind': {'$ne': 'access'}}, {'_id': 0})
     if not order:
         raise HTTPException(status_code=404, detail='Order not found.')
     submitted_hash = body.tx_hash.lower()
@@ -726,7 +749,7 @@ async def list_market_orders(request: Request):
     account_id, target, is_live = await _get_auth_target(request)
     if db is None or not hasattr(db, 'purchase_orders'):
         raise HTTPException(status_code=503, detail='ORDER_STORAGE_UNAVAILABLE')
-    docs = await db.purchase_orders.find({'account_id': account_id}, {'_id': 0}).to_list(50)
+    docs = await db.purchase_orders.find({'account_id': account_id, 'kind': {'$ne': 'access'}}, {'_id': 0}).to_list(50)
     return {'orders': docs}
 
 
@@ -912,6 +935,11 @@ async def join(request: Request, body: JoinRequest):
     session_token = request.cookies.get('deadzone_session') or request.headers.get('Authorization', '').replace('Bearer ', '')
     user = await get_session_account(db, session_token) if session_token else None
 
+    if not user:
+        raise HTTPException(401, 'WALLET_SIGNATURE_REQUIRED')
+    if not user['paid_access']:
+        raise HTTPException(402, 'ONE_TIME_ACCESS_PAYMENT_REQUIRED')
+
     account_id = ''
     progress = None
     if user and user.get('account'):
@@ -919,17 +947,11 @@ async def join(request: Request, body: JoinRequest):
         progress = user.get('progress')
         player_name = user['account']['nickname']
         player_skin = user['account'].get('skin') or body.skin
-    elif os.environ.get('REQUIRE_AUTH', 'false').lower() == 'true':
-        raise HTTPException(401, 'Robinhood Chain wallet signature required to enter the zone.')
-    else:
-        if not body.name or len(body.name.strip()) < 2:
-            raise HTTPException(422, 'The call sign must be at least 2 characters long.')
-        player_name = body.name.strip()
-        player_skin = body.skin
 
     token = secrets.token_urlsafe(24)
     pending[token] = {
         'account_id': account_id,
+        'auth_token': session_token,
         'name': player_name,
         'weapon': 'glock18',
         'skin': player_skin,
@@ -943,6 +965,11 @@ async def join(request: Request, body: JoinRequest):
 async def websocket(ws: WebSocket, token: str):
     session = pending.pop(token, None)
     if not session or session['expires'] < time.monotonic() or sum(not p.get('bot') for p in game.players.values()) >= 200:
+        await ws.close(code=1008)
+        return
+    authenticated = await get_session_account(db, session.get('auth_token'))
+    if (not authenticated or authenticated['account_id'] != session.get('account_id')
+            or not authenticated['paid_access']):
         await ws.close(code=1008)
         return
     await ws.accept()

@@ -1,7 +1,7 @@
 # DEADZONE — Ürün ve geliştirme kaydı
 
 ## Orijinal problem statement
-Bu çalışma dalının başlangıç isteği: "https://github.com/Dostarki/dayhoodz bu repoyu çek ve çalıştır". Repo alınmış ve çalıştırılmıştır; aşağıdaki önceki ürün gereksinimleri repoyla taşınmıştır.
+Bu çalışma dalının güncel kaynak reposu `https://github.com/Dostarki/lastzoneson`: kullanıcı repoyu `/app` içinde çalıştırmayı istedi; önceki oturumda kurulum ve temel erişim kontrolü yapıldı. Aşağıdaki eski ürün gereksinimleri ve test kayıtları repoyla taşınmıştır; güncel dalda bütünü yeniden doğrulanmış değildir. Önceki kaynaklardan biri `https://github.com/Dostarki/dayhoodz` idi.
 
 Bir zombi project oyunu istiyorum. Webde çalışacak grafikleri ise görselde attığım gibi olacak ve online bir oyun olacak. Harita ise büyük bir alan olacak etrafta ağaç ev gibi rastgele renderlensin oynayış tarzı ise GTA gibi olacak. W A S D ve mouse ile oynanabilecek olacak. Harita büyüklüğü ise 200 oyuncuyu rahat şekilde sığacak bir alan olacak. Kamera ise oyuncuyu takip edecek ve sadece gittiği alanı görebilecek. Oyuna başlamak için ise Start game olacak ve silahını seçecek. Silahlar ise AK47,Ak117,AK107,Otomatik fişek atan tüfek ve bu tüfekler kaliteli görünsün oyuncunun elinde net belli olsun. Frendly fire açık olacak etrafta rastgele zombiler olacak öldürdükçe puan gelecek.
 
@@ -191,3 +191,71 @@ Bir zombi project oyunu istiyorum. Webde çalışacak grafikleri ise görselde a
 - P1: Geçici yönetici şifresini kullanıcıyla güçlü bir şifreye değiştirme; 200 aktif insan/bot + yoğun çatışma yükünde kapasite/FPS/RTT testi. Sert 200 sınırı test edildi, 200 gerçek aktif katılımcı performansı GARANTİ EDİLMEDİ.
 - P1: Önceki kullanıcıya özgü sürekli 300 ms sorununun gerçek ağ/cihaz ölçümleri bekleniyor; bu özellikler sırasında çözüldüğü iddia edilmez.
 - P2 / öneri: Bot zorluğu/nişan hassasiyeti ayarı; isteğe bağlı performans grafiği, model/ses/oyun dengesi backlog'u korunur.
+
+## Güncel çalışma — 2026-10-01: Ana sayfa arka planı ve ortalanmış başlangıç
+### Kullanıcı istekleri
+- "Ana sayfanın arka plandaki resim yerine https://lastzhood.fun un arka plandaki görseli kullan."
+- "START GAME butonu ortada olsun"
+
+### Uygulananlar
+- Referans sitenin CSS arka planı tespit edildi: `https://lastzhood.fun/static/media/survival-map.7a82fef224d96e7fdf1a.jpg`.
+- Orijinal 1264×848 JPEG, `/frontend/public/images/lastzhood-survival-map.jpg` olarak yerel statik dosyaya alındı; çalışma anında kaynak siteye bağımlı değildir. Dosya yeniden üretilmedi, başka stok görsel kullanılmadı.
+- `StartScreen.jsx/.css`: eski boss masaüstü/mobil görselleri yerine tek harita, tam ekran `object-fit: cover`, merkez odak ve metin okunabilirliği için kenar gölgesi. Ana başlık, market, admin ve oyun başlangıç davranışı korundu. Market düğmesine `data-testid` eklendi.
+- START GAME yatay/dikey %50 konumuna alındı; hover/active hareketi merkez konumunu korur. Mobil ve kısa ekranlarda eski alt konum kuralları kaldırıldı.
+- Backend, kimlik doğrulama, ödeme, oyun mantığı, bağımlılıklar ve ortam değişkenleri değiştirilmedi. Yeni hesap veya MOCKED ürün akışı yok.
+
+### Doğrulama
+- Dış önizleme üzerinde tarayıcı kontrolü: görsel doğru dosyadan 1264 piksel doğal genişlikle yüklendi.
+- 320×568, 568×320, 768×1024, 1024×768, 1440×900 ve 1920×800: START GAME yatay/dikey merkez farkı <1 piksel; yatay taşma yok. Hover sadece beklenen 2 piksel yükselmeyi yapar.
+- Market aç/kapat, ADMIN → `/admin`, START GAME → `/loadout` geçti. Arka planın ilk kontrolünde üç düğmede çakışma/ekran dışı yerleşim bulunmadı.
+- Son ekran görüntüsü: `/tmp/lastzhood-centered-start.jpg`; tarayıcı kayıtları `/root/.emergent/automation_output/20261001_133234/console_20261001_133234.log`.
+- Oturumsuz admin isteğindeki 401 beklenen davranıştır. Market modalında önceden mevcut açıklama erişilebilirliği uyarısı var; bu görsel değişikliğin kapsamı dışında. Tam oyun, admin girişi, cüzdan/ödeme ve yük testleri yapılmadı.
+
+### Sonraki işler / öncelikler
+- P0: Bu görsel değişiklik kapsamında bilinen engel yok; kullanıcının görünüm değerlendirmesi bekleniyor.
+- P1: İstendiğinde önceki kurulumun bağımlılık manifesti uyumluluğunu ve kritik admin/oyun akışlarını doğrulama; önceki kapasite/ağ performansı backlog'u korunur.
+- P2: Market modalının erişilebilir açıklama uyarısını giderme; isteğe bağlı görsel WebP optimizasyonuyla ilk açılış indirme boyutunu küçültme. Bunlar bu çalışmada uygulanmadı.
+
+## Güncel çalışma — 2026-10-01: CONNECT WALLET / Robinhood Mainnet (devam ediyor)
+### Kullanıcının güncel talepleri
+- RainbowKit'in kurulumunu kontrol et; START GAME sonrası sağ üst düğme CONNECT WALLET olsun.
+- CONNECT WALLET tıklanınca giriş yapılabilecek cüzdanlar açılsın; transfer/bakiye için yalnız Robinhood Chain Mainnet, ETH kullanılsın.
+- Kullanıcı gerçek Reown Project ID sağladı; değer yalnız frontend/.env içinde tutuluyor. Ağ 4663 (0x1237); Ethereum Mainnet 1 veya Robinhood Testnet 46630 DEĞİL.
+- Son hata bildirimi: ana sayfada `(0 , import_openapi_fetch.default) is not a function`, `@metamask/sdk-analytics` / `@metamask/sdk` yığını; cüzdan seçince onay açılmıyor.
+
+### Uygulanan değişiklikler ve teşhis
+- RainbowKit zaten 2.2.11 kurulu idi. Düğme CONNECT WALLET; üst menü ve lobi için benzersiz test kimlikleri, mobilde taşmayan iki satırlı üst menü eklendi.
+- Desteklenmeyen wagmi3 kombinasyonu rehberle wagmi2.19.3 + viem2.38.0'a taşındı. `connectorsForWallets`: MetaMask, Rainbow, Coinbase Wallet, WalletConnect ve injected seçeneği; gerçek Reown kimliği, tek mainnet zinciri ve RPC/explorer ortam değişkenleri.
+- WalletGate, window.ethereum varlığında seçiciyi atlamaz; her CONNECT WALLET tıklaması seçiciyi açar. Yanlış ağda SWITCH NETWORK, reddedilen ağ geçişinde hata; SIWE ana ağ kontrolü, hesap/ağ değişiminde uygulama oturumunu sonlandırma, çıkışta cüzdan bağlantısını kesme eklendi. Cüzdan modalında Escape artık oyun ayarlarını açmaz.
+- Backend `chain_config.py` ana ağ ayarlarını ortaklaştırır. SIWE challenge/verify/session yalnız 4663; domain/URI izin listesi, imzalanan metnin challenge'a birebir bağlanması, atomik tek kullanımlı nonce; HttpOnly+Secure cookie ve Pydantic yanıt modelleri. Mevcut market ödeme doğrulaması ve gönderiminde açık ana ağ kontrolleri.
+- RPC gerçek `eth_chainId` yanıtı 0x1237. Bağımsız para çekme özelliği eklenmedi, fon aktarılmadı.
+- QR seçerken `invalid border=0`: cuer0.0.3 → qr~0 yeni qr0.7.2 ile uyumsuz. Rehber önerisiyle qr0.5.5 doğrudan sabitlendi; yarn-deduplicate --packages qr --strategy fewer ile cuer'ın efektif paketi de0.5.5 yapıldı. Kilit dosyası güncel; node_modules elle değiştirilmedi.
+- MetaMask'in enableAnalytics:false ayarı zaten mevcut; analiz istemcisi modül yüklenirken kurulduğu için tek başına bu ayar hatayı çözmez. Rehberle yeni `lib/metaMaskInjectedWallet.js`: kurulu MetaMask için gerçek wagmi injected hedefi, uzantı yoksa WalletConnect QR/mobil bağlantısı. Yerleşik SDK kullanan metaMaskWallet konfigürasyondan çıkarıldı; EIP-6963 açık. Zincir değişmedi.
+
+### Test durumu — henüz sonuçlandırılmadı
+- iteration_7.json: seçici aç/kapat, Escape, responsive; gerçek imzalı backend SIWE, yanlış ağ/origin/replay/eşzamanlı nonce kontrolleri ve 7 frontend regresyonu geçti; QR çökmesi engelleyici olarak raporlandı.
+- Eksik mongomock-motor yüklendi ve pip freeze ile requirements güncellendi; market+chain guard 9/9 geçti (`market-wallet-regression.log`).
+- QR düzeltmesi sonrası production build başarılı, bağımlılık/source-map uyarıları var (`wallet-build-final.log`). MetaMask SDK düzeltmesinden SONRA zorunlu testing_agent tekrar kontrolü BEKLENİYOR. Gerçek kullanıcı cihazında cüzdan onayı/QR tarama henüz doğrulanmadı.
+- Ürün API'lerinde MOCKED uygulama yok. Testlerde bağımsız boş cüzdanların yerel imzaları ve mock birim-test verileri kullanıldı; gerçek para işlemi yapılmadı.
+
+### Öncelikler
+- P0: Son SDK düzeltmesi sonrası ana sayfada hata olmadığını, kurulu cüzdana eth_requestAccounts/personal_sign iletimini ve gerçek WalletConnect QR oluşumunu testing_agent ile doğrula; rapordaki tüm çekirdek sorunları gider.
+- P1: Kullanıcının gerçek uzantı/telefonuyla bağlantı+imza onayı. Test için para gönderme veya çekme yapma. Önceki performans/backlog korunur.
+- P2: Cuer/RainbowKit uyumluluk düzeltmesi yayımlanınca qr sabitlemesini yeniden değerlendir; cüzdan ağ/bakiye geri bildirimi iyileştirmeleri isteğe bağlı.
+
+## 2026-10-01 — Tek seferlik erişim, ortak market cüzdanı, taktik kutu görselleri (test bekliyor)
+- Kullanıcı onayladı: cüzdan başına bir kez $1 karşılığı ETH, yalnız Robinhood Mainnet4663; alıcı `0x45d9AA6ef98407dda4911c6f4a9Af59f3de4E334` (checksum doğrulandı). Mevcut hesap kaydı ödeme sayılmaz; zincirde doğrulanmış erişim kaydı sonraki girişleri ücretsiz yapar. Yeni market ödemeleri de aynı adrese gider; ürünler kalıcı envantere teslim edilir.
+- `access_payments.py`, `access_routes.py`: `/api/access`, `/quote`, `/submit`; benzersiz aktif erişim siparişi/cüzdan, iki onay, paylaşılmış transaction hash tekillik kontrolü, kalıcı erişim hakkı ve idempotent çökme sonrası teslim tamamlama. `/join` ve `/ws/{token}` sunucu tarafında ücretli erişim ve geçerli oturum kontrol eder. Auth yanıtında `paid_access` var.
+- `market_payments.py` alıcı ve fiyat kaynağını env'den okur. Eski siparişler kendi alıcı/tutar koşullarına bağlı kalır. Quote geçmişi korunur; zamanında bildirilen ödemeler sonradan blok onayı alınca salt quote süresi nedeniyle reddedilmez.
+- Tek bir `AccessPaymentDialog` ve `useAccessCheckout` eklendi: tutar, alıcı, ağ, süre, açık onay, cüzdan imzasından ayrı native ETH transferi, bekleme/iptal/hata, hash'i kaybedilmeden yenileme ve tekrar doğrulama. AuthProvider kalıcı paid_access bilgisini ortak taşır. Tahsilat testleri gerçek para göndermemelidir.
+- Ana sayfa/lobi OPEN MARKET yalnız bağlı cüzdanda görünür; market aynı Wagmi cüzdanını kullanır ve kopunca kapanır. Market header bağlı adresi gösterir. Oturum açma, cüzdanı ikinci defa bağlama anlamına gelmez.
+- Son görsel isteği: "Buradaki 4 paketleri oyun grafiğine uyumlu kutularda yap görselleri. CS2 kutu tarzları ama bizim oyun grafiğiyle olacak." Referans: `https://customer-assets-lxgj4vgw.emergentagent.net/job_zoneson-app/artifacts/b028k6mj_image.png`.
+- Dört özgün stilize düşük poligonlu Field/Supply/Operator/Outpost kutusu üretildi; mevcut fiyat/içerik değiştirilmedi. `/frontend/public/images/crates/pack_*.webp`: 512px, toplam yaklaşık69KB, yerel statik dosyalar; kart ve detayda object-fit:contain. Tasarım notları `/app/design_guidelines.json`.
+- P0: Zorunlu kapsamlı test raporu bekleniyor. Son görsel smoke'ta test provider'ında `.once` eksikliği çıktı; gerçek cüzdan hatası diye yorumlanmamalı, tam EventEmitter destekli test provider'ıyla cüzdan onay akışı denenmeli. Ana sayfa MetaMask SDK hatası, gerçek WalletConnect QR üretimi ve finansal teslimat henüz son raporla onaylanmadı.
+
+### Son hata düzeltmesi — native ETH gönderim biçimi (test bekliyor)
+- Kullanıcı UNLOCK PLAY ve markette `wallet_sendTransaction` (-32601) ile `External transactions to internal accounts cannot include data` hatalarını bildirdi; seçili kutu yanında satın alma düğmesi istedi.
+- Entegrasyon rehberi sonrası yeni quote'lar `payment_mode=native_transfer`; calldata YOK. `useNativePayment.js` her iki ödeme ekranında seçili wagmi walletClient üzerinden standart `eth_sendTransaction` gönderir; unsupported wallet_sendTransaction fallback veya otomatik yeniden ücretlendirme yok.
+- Eski, henüz gönderilmemiş marker quote'ları yeni quote'a geçer; eski gönderilmiş siparişlerin tam marker koşulları değişmez. Sunucu: cüzdan sahipliği, tam tutar, alıcı, zincir, zaman, başarılı makbuz, blok eşleşmesi, 2 onay ve global chain+hash tekilliği korundu. Native ödemede boş calldata zorunlu.
+- Dört kutu kartının her birinde seçime bağlı BUY düğmesi eklendi; iç içe button yerine article + ayrı seçim/satın alma kontrolleri. Eski marker açıklaması kaldırıldı.
+- Gerçek RPC'ye yalnız eth_estimateGas okuma isteği yapıldı; para gönderilmedi. Kullanıcının hata örneğindeki paket tutarı için RPC ayrıca yetersiz bakiye döndürdü; küçük native değerli salt tahmin çağrısı geçiyor. Bu, gerçek ödeme başarı kanıtı değildir.

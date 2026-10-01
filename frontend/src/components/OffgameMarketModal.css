@@ -290,9 +290,15 @@
 .ogm-body::-webkit-scrollbar,.ogm-package-detail::-webkit-scrollbar{width:8px}.ogm-body::-webkit-scrollbar-thumb,.ogm-package-detail::-webkit-scrollbar-thumb{background:#465341;border:2px solid #111713;border-radius:4px}
 .ogm-package-card{display:grid;grid-template-columns:90px minmax(0,1fr);padding:12px;min-height:138px;justify-content:start;gap:4px 12px;transform:none!important}
 .ogm-package-card:hover{transform:none!important;background:#202c22}
+.ogm-package-card.with-checkout{display:flex;flex-direction:column;gap:10px}
+.ogm-package-select{display:grid;grid-template-columns:90px minmax(0,1fr);gap:4px 12px;text-align:left;padding:0;border:0;background:transparent;color:inherit;min-width:0;width:100%;cursor:pointer}
+.ogm-package-select:focus-visible{outline:2px solid #c8d6a0;outline-offset:5px}
+.ogm-card-buy{margin-top:auto;min-height:36px;font-size:12px;letter-spacing:0}
 .ogm-crate-mark{width:90px;height:92px;grid-row:1 / span 2;position:relative;display:grid;place-items:center;overflow:hidden;background:#18221b}
-.ogm-package-crate{width:86px;height:72px;fill:#536646;stroke:#9daa7a;stroke-width:2}
-.ogm-package-crate.pack_supply{fill:#4c5a4b;stroke:#d5bf83}.ogm-package-crate.pack_operator{fill:#5b503b;stroke:#d5bf83}.ogm-package-crate.pack_outpost{fill:#603b31;stroke:#d95845}
+.ogm-package-img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;object-position:center;transition:transform .25s ease;transform-origin:center}
+.ogm-package-card:hover .ogm-package-img{transform:scale(1.04)}
+.ogm-crate-mark.large{width:min(100%,220px);height:auto;aspect-ratio:1;border:0;background:#18221b}
+@media(prefers-reduced-motion:reduce){.ogm-package-img{transition:none}.ogm-package-card:hover .ogm-package-img{transform:none}}
 .ogm-preview-strip{position:absolute;inset:auto 2px 2px;display:flex;justify-content:center;gap:1px;background:#0e1210d9;padding:2px}.ogm-preview-strip>span{width:24px;height:22px;display:grid;place-items:center}.ogm-preview-strip svg{width:20px;height:20px}
 .ogm-content-thumb{display:flex;align-items:center;gap:8px;min-width:0}.ogm-content-thumb>svg{width:30px;height:30px;flex:none}.ogm-package-detail .ogm-content-thumb>svg{width:34px;height:34px}.ogm-package-detail .ogm-content-thumb span{overflow-wrap:anywhere}
 .ogm-full-manifest li{align-items:center;min-height:40px}.ogm-history-actions{display:flex;align-items:center;gap:10px}.ogm-history-actions button{border:1px solid #53634a;background:#1c281f;color:#c8d6a0;padding:8px;cursor:pointer}

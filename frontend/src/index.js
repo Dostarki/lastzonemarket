@@ -7,7 +7,8 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 import "@/index.css";
 import App from "@/App";
-import { wagmiConfig } from "@/lib/walletConfig";
+import { AccessPaymentDialog } from './components/AccessPaymentDialog';
+import { wagmiConfig, robinhoodMainnet } from "@/lib/walletConfig";
 import { AuthProvider } from "@/lib/authContext";
 
 const queryClient = new QueryClient({
@@ -33,8 +34,9 @@ root.render(
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <RainbowKitProvider theme={deadzoneRainbowTheme} modalSize="compact">
+          <RainbowKitProvider theme={deadzoneRainbowTheme} modalSize="compact" initialChain={robinhoodMainnet}>
             <App />
+            <AccessPaymentDialog />
           </RainbowKitProvider>
         </AuthProvider>
       </QueryClientProvider>

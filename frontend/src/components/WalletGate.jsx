@@ -1,40 +1,28 @@
 import React, { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useConnect, useSwitchChain } from 'wagmi';
+import { useDisconnect, useSwitchChain } from 'wagmi';
 import { Wallet, LogOut, UserCheck, AlertCircle, KeyRound, LoaderCircle } from 'lucide-react';
 import { useAuth } from '../lib/authContext';
+import { robinhoodMainnet } from '../lib/walletConfig';
 import { Button } from './ui/button';
 import './WalletGate.css';
 
-export const WalletGate = ({ onProfileLoaded }) => {
-  const { isConnected, address, chain } = useAccount();
-  const { connect, connectors, isPending: connecting } = useConnect();
-  const { switchChain } = useSwitchChain();
-  const { user, status, loginWithWallet, logout, updateProfile } = useAuth();
+export const WalletGate = ({ onProfileLoaded, testIdPrefix = 'wallet' }) => {
+  const { switchChainAsync, isPending: switching } = useSwitchChain();
+  const { disconnect } = useDisconnect();
+  const { user, status, loginWithWallet, logout, updateProfile, setAccessDialogOpen } = useAuth();
   const [signing, setSigning] = useState(false);
   const [showNickModal, setShowNickModal] = useState(false);
   const [newNick, setNewNick] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-
-  // Handle direct connect (e.g. MetaMask extension)
-  const handleDirectConnect = () => {
-    setErrorMsg('');
-    const target =
-      connectors.find((c) => c.id === 'metaMask' || c.name.toLowerCase().includes('metamask')) ||
-      connectors.find((c) => c.id === 'injected') ||
-      connectors[0];
-
-    if (target) {
-      connect({ connector: target });
-    }
-  };
 
   const handleSignIn = async () => {
     setErrorMsg('');
     setSigning(true);
     try {
       const acct = await loginWithWallet();
-      if (acct && (!acct.nickname || acct.nickname.startsWith('Survivor_'))) {
+      if (acct && !acct.paid_access) setAccessDialogOpen(true);
+      if (acct?.paid_access && (!acct.nickname || acct.nickname.startsWith('Survivor_'))) {
         setNewNick(acct.nickname || '');
         setShowNickModal(true);
       }
@@ -60,13 +48,12 @@ export const WalletGate = ({ onProfileLoaded }) => {
   };
 
   return (
-    <div className="wallet-gate" data-testid="wallet-gate">
+    <div className="wallet-gate" data-testid={`${testIdPrefix}-gate`}>
       <ConnectButton.Custom>
         {({
           account,
           chain: currentChain,
           openAccountModal,
-          openChainModal,
           openConnectModal,
           mounted,
         }) => {
@@ -80,62 +67,59 @@ export const WalletGate = ({ onProfileLoaded }) => {
                   type="button"
                   className="wallet-btn connect-btn"
                   onClick={() => {
-                    // Try direct MetaMask connector first to pop extension window immediately; fallback to RainbowKit modal
-                    if (window.ethereum) {
-                      handleDirectConnect();
-                    } else if (openConnectModal) {
-                      openConnectModal();
-                    }
+                    setErrorMsg('');
+                    openConnectModal();
                   }}
-                  disabled={connecting}
-                  data-testid="wallet-connect-btn"
+                  disabled={!ready || !openConnectModal}
+                  data-testid={`${testIdPrefix}-connect-btn`}
                 >
-                  {connecting ? <LoaderCircle size={15} className="spin" /> : <Wallet size={15} />}
-                  <span>{connecting ? 'CONNECTING METAMASK...' : 'CONNECT ROBINHOOD WALLET'}</span>
+                  <Wallet size={15} />
+                  <span data-testid={`${testIdPrefix}-connect-label`}>CONNECT WALLET</span>
                 </button>
               </div>
             );
           }
 
-          if (currentChain.unsupported) {
+          if (currentChain.unsupported || currentChain.id !== robinhoodMainnet.id) {
             return (
               <button
                 type="button"
                 className="wallet-btn wrong-net-btn"
-                onClick={() => {
-                  if (switchChain) {
-                    switchChain({ chainId: 4663 });
-                  } else if (openChainModal) {
-                    openChainModal();
-                  }
+                onClick={async () => {
+                  setErrorMsg('');
+                  try { await switchChainAsync({ chainId: robinhoodMainnet.id }); }
+                  catch (error) { setErrorMsg(error.shortMessage || 'Network switch was cancelled or failed. Try again.'); }
                 }}
-                data-testid="wallet-chain-btn"
+                disabled={switching}
+                title="Switch to Robinhood Chain Mainnet (4663)"
+                data-testid={`${testIdPrefix}-chain-btn`}
               >
                 <AlertCircle size={15} />
-                <span>SWITCH TO ROBINHOOD CHAIN</span>
+                <span data-testid={`${testIdPrefix}-chain-label`}>{switching ? 'SWITCHING...' : 'SWITCH NETWORK'}</span>
               </button>
             );
           }
 
           // Wallet is connected, check SIWE state
-          if (status !== 'authenticated' || !user) {
+          if (status !== 'authenticated' || !user || !user.paid_access) {
             return (
               <div className="wallet-siwe-wrapper">
                 <button
                   type="button"
                   className="wallet-btn siwe-btn"
-                  onClick={handleSignIn}
+                  onClick={() => status === 'authenticated' && user ? setAccessDialogOpen(true) : handleSignIn()}
                   disabled={signing}
-                  data-testid="wallet-siwe-btn"
+                  data-testid={`${testIdPrefix}-siwe-btn`}
                 >
                   {signing ? <LoaderCircle size={15} className="spin" /> : <KeyRound size={15} />}
-                  <span>{signing ? 'REQUESTING SIGNATURE...' : 'SIGN TO PLAY (SIWE)'}</span>
+                  <span data-testid={`${testIdPrefix}-siwe-label`}>{signing ? 'SIGNING...' : user && status === 'authenticated' ? 'UNLOCK PLAY · $1' : 'SIGN TO PLAY'}</span>
                 </button>
                 <button
                   type="button"
                   className="wallet-btn-mini"
                   onClick={openAccountModal}
                   title={account.address}
+                  data-testid={`${testIdPrefix}-account-button`}
                 >
                   {account.displayName}
                 </button>
@@ -145,18 +129,18 @@ export const WalletGate = ({ onProfileLoaded }) => {
 
           // Fully authenticated
           return (
-            <div className="wallet-badge" data-testid="wallet-user-badge">
-              <div className="wallet-badge-info" onClick={openAccountModal}>
+            <div className="wallet-badge" data-testid={`${testIdPrefix}-user-badge`}>
+              <button type="button" className="wallet-badge-info" onClick={openAccountModal} data-testid={`${testIdPrefix}-profile-button`}>
                 <span className="wallet-badge-status"><i className="status-dot" /></span>
-                <span className="wallet-badge-nick">{user.nickname || account.displayName}</span>
-                <span className="wallet-badge-addr">{account.address.slice(0, 6)}...{account.address.slice(-4)}</span>
-              </div>
+                <span className="wallet-badge-nick" data-testid={`${testIdPrefix}-nickname`}>{user.nickname || account.displayName}</span>
+                <span className="wallet-badge-addr" data-testid={`${testIdPrefix}-address`}>{account.address.slice(0, 6)}...{account.address.slice(-4)}</span>
+              </button>
               <button
                 type="button"
                 className="wallet-logout-btn"
-                onClick={logout}
+                onClick={async () => { await logout(); disconnect(); }}
                 title="Disconnect & Sign Out"
-                data-testid="wallet-logout-btn"
+                data-testid={`${testIdPrefix}-logout-btn`}
               >
                 <LogOut size={13} />
               </button>
@@ -166,19 +150,20 @@ export const WalletGate = ({ onProfileLoaded }) => {
       </ConnectButton.Custom>
 
       {errorMsg && (
-        <div className="wallet-error-msg" role="alert">
+        <div className="wallet-error-msg" role="alert" data-testid={`${testIdPrefix}-error`}>
           <AlertCircle size={12} /> {errorMsg}
         </div>
       )}
 
       {showNickModal && (
         <div className="wallet-nick-backdrop">
-          <div className="wallet-nick-modal">
+          <div className="wallet-nick-modal" role="dialog" aria-label="Register call sign" data-testid={`${testIdPrefix}-nickname-modal`}>
             <h3><UserCheck size={18} /> REGISTER CALL SIGN</h3>
             <p>Welcome, survivor! Set your permanent call sign for this Robinhood wallet.</p>
             <form onSubmit={handleSaveNickname}>
               <input
                 type="text"
+                data-testid={`${testIdPrefix}-nickname-input`}
                 value={newNick}
                 onChange={(e) => setNewNick(e.target.value)}
                 minLength={2}
@@ -188,10 +173,10 @@ export const WalletGate = ({ onProfileLoaded }) => {
                 required
               />
               <div className="wallet-modal-actions">
-                <Button type="button" variant="outline" onClick={() => setShowNickModal(false)}>
+                <Button type="button" variant="outline" onClick={() => setShowNickModal(false)} data-testid={`${testIdPrefix}-nickname-skip`}>
                   Skip for Now
                 </Button>
-                <Button type="submit" className="save-btn">
+                <Button type="submit" className="save-btn" data-testid={`${testIdPrefix}-nickname-save`}>
                   Confirm Call Sign
                 </Button>
               </div>

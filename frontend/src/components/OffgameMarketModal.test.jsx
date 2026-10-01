@@ -31,7 +31,7 @@ describe('OffgameMarketModal account and payment states', () => {
   let host, root, sendTransactionAsync;
   const render = async (auth, wallet, tab = 'packages') => {
     useAuth.mockReturnValue(auth);
-    useAccount.mockReturnValue(wallet);
+    useAccount.mockReturnValue({ isConnected: true, chainId: 4663, address: '0xabc', ...wallet });
     await act(async () => root.render(<OffgameMarketModal open onClose={jest.fn()} />));
   };
   beforeEach(() => {
@@ -49,7 +49,7 @@ describe('OffgameMarketModal account and payment states', () => {
   afterEach(async () => { await act(async () => root.unmount()); host.remove(); jest.clearAllMocks(); });
 
   it('keeps catalog public while showing a clear sign-in state and disabling checkout', async () => {
-    await render({ status: 'unauthenticated', user: null, loginWithWallet: jest.fn() }, { address: undefined, chainId: undefined });
+    await render({ status: 'unauthenticated', user: null, loginWithWallet: jest.fn() }, { address: '0xabc', chainId: 4663, isConnected: true });
     expect(host.textContent).toContain('Field Package');
     expect(host.textContent).toContain('Sign in to view your account');
     expect(apiClient.get).toHaveBeenCalledWith('/offgame-market/catalog');
@@ -91,6 +91,17 @@ describe('OffgameMarketModal account and payment states', () => {
     await act(async () => host.querySelector('.ogm-checkout-confirm .ogm-buy-btn').dispatchEvent(new MouseEvent('click', { bubbles: true })));
     expect(apiClient.post).toHaveBeenCalledWith('/offgame-market/orders/o1/submit', { tx_hash: `0x${'a'.repeat(64)}` });
     expect(sendTransactionAsync).not.toHaveBeenCalled();
+  });
+
+  it('blocks wallet approval when quote chain mismatches Robinhood mainnet guard', async () => {
+    const wrongChainOrder = { ...order, quote: { ...quote, chain_id: 1 }, status: 'awaiting_payment' };
+    apiClient.post.mockResolvedValue({ data: { order: wrongChainOrder } });
+    await render({ status: 'authenticated', user: { address: '0xabc' } }, { address: '0xabc', chainId: 4663 });
+    const review = host.querySelector('.ogm-package-detail .ogm-buy-btn');
+    await act(async () => review.dispatchEvent(new MouseEvent('click', { bubbles: true })));
+    await act(async () => host.querySelector('.ogm-checkout-confirm .ogm-buy-btn').dispatchEvent(new MouseEvent('click', { bubbles: true })));
+    expect(sendTransactionAsync).not.toHaveBeenCalled();
+    expect(host.textContent).toContain('Wallet account or network changed. Reconnect the signed-in account and try again.');
   });
 
   it('keeps a wallet-submitted hash across reload after a temporary verification failure', async () => {

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { BrowserRouter, useLocation, useNavigate } from 'react-router-dom';
+import { useConnectModal, useAccountModal, useChainModal } from '@rainbow-me/rainbowkit';
 import { Biohazard, Settings2, Trophy, Volume2, VolumeX, Crosshair, ArrowUpRight, Radio, Maximize2, ShieldCheck } from 'lucide-react';
 import { Toaster } from './components/ui/sonner';
 import { Button } from './components/ui/button';
@@ -30,6 +31,9 @@ const DEFAULT_WEAPON_SLOTS = { glock18: '1', ak47: '2' };
 const loadWeaponSlots = () => loadPreferences().weaponSlots;
 
 export function GameApp() {
+  const { connectModalOpen } = useConnectModal();
+  const { accountModalOpen } = useAccountModal();
+  const { chainModalOpen } = useChainModal();
   const container = useRef(null), engine = useRef(null);
   const preferences = useRef(loadPreferences());
   const [ready, setReady] = useState(false), [worldError, setWorldError] = useState(''), [status, setStatus] = useState(null);
@@ -74,6 +78,7 @@ export function GameApp() {
   }, [inGame, session.mode, location.pathname, navigate]);
   useEffect(() => {
     const keyDownHandler = e => {
+      if (connectModalOpen || accountModalOpen || chainModalOpen || document.querySelector('[data-testid="access-payment-dialog"]')) return;
       if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName) || e.target.isContentEditable) return;
       const isAlive = session.state?.me.hp > 0;
 
@@ -121,7 +126,7 @@ export function GameApp() {
     return () => {
       window.removeEventListener('keydown', keyDownHandler, true);
     };
-  }, [navigate, panel, inGame, bossMapOpen, inventoryOpen, statsOpen, craftOpen, radialOpen, allianceOpen, marketOpen, weaponSlots, session.state?.me.hp, session]);
+  }, [navigate, panel, inGame, bossMapOpen, inventoryOpen, statsOpen, craftOpen, radialOpen, allianceOpen, marketOpen, weaponSlots, session.state?.me.hp, session, connectModalOpen, accountModalOpen, chainModalOpen]);
 
   const setWeaponSlot = (weaponId, key) => setWeaponSlots(current => {
     const next = Object.fromEntries(Object.entries(current).filter(([id, slot]) => id !== weaponId && slot !== key));
@@ -157,7 +162,7 @@ export function GameApp() {
           <button onClick={() => navigate('/admin')} data-testid="nav-admin" title="Admin panel" aria-label="Admin panel"><ShieldCheck size={14} /> ADMIN</button>
         </nav>
         <div className="topbar-right">
-          <WalletGate />
+          <WalletGate testIdPrefix="header-wallet" />
           <div className="server-status" data-testid="server-status"><i className={status ? 'status-dot' : 'status-dot offline'} /><span>{status ? 'SERVER ONLINE' : 'CONNECTING'}<small>WESTFALL–01</small></span><Radio size={17} /></div>
         </div>
       </header>

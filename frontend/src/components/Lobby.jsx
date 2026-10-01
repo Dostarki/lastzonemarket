@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAccount } from 'wagmi';
 import { ArrowRight, ChevronRight, Crosshair, ShieldAlert, UserRound, LoaderCircle, Wallet, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { Button } from './ui/button';
 import { SkinSelector } from './SkinSelector';
@@ -10,6 +11,7 @@ export { WEAPONS } from '../game/config';
 
 export const Lobby = ({ skin, setSkin, start, mode, ready, error }) => {
   const { user, status, checkAuth } = useAuth();
+  const { isConnected } = useAccount();
   const [name, setName] = useState(() => localStorage.getItem('deadzone-name') || 'Wanderer');
   const [marketOpen, setMarketOpen] = useState(false);
 
@@ -24,7 +26,7 @@ export const Lobby = ({ skin, setSkin, start, mode, ready, error }) => {
 
   const submit = e => {
     e.preventDefault();
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !user.paid_access) return;
     localStorage.setItem('deadzone-name', name);
     start(name, 'glock18', skin);
   };
@@ -47,7 +49,7 @@ export const Lobby = ({ skin, setSkin, start, mode, ready, error }) => {
       </div>
 
       {/* Off-Game Market & VIP Entry Banner */}
-      <div className="lobby-market-banner" data-testid="lobby-market-banner">
+      {isConnected && <div className="lobby-market-banner" data-testid="lobby-market-banner">
         <div className="market-banner-left">
           <div className="market-banner-eyebrow">
             <span className="market-pulse-dot" /> TACTICAL SUPPLY DEPOT
@@ -64,7 +66,7 @@ export const Lobby = ({ skin, setSkin, start, mode, ready, error }) => {
           <span>OPEN MARKET</span>
           <ChevronRight size={14} />
         </button>
-      </div>
+      </div>}
 
       <form onSubmit={submit} className="loadout-form">
         <label className="section-label" htmlFor="nickname" data-testid="nickname-label">
@@ -109,21 +111,21 @@ export const Lobby = ({ skin, setSkin, start, mode, ready, error }) => {
             className="start-button"
             type="submit"
             data-testid="join-game-button"
-            disabled={!ready || mode === 'connecting'}
+            disabled={!ready || mode === 'connecting' || !user.paid_access}
           >
             <span className="start-icon">
               {mode === 'connecting' ? <LoaderCircle className="spin" /> : <Crosshair />}
             </span>
             <span className="start-copy">
               {mode === 'connecting' ? 'CONNECTING' : 'JOIN GAME'}
-              <small>WESTFALL–01 (PERSISTENT)</small>
+              <small data-testid="join-access-status">{user.paid_access ? 'PERMANENT ACCESS ACTIVE' : 'ONE-TIME ACCESS REQUIRED'}</small>
             </span>
             <ArrowRight size={22} />
           </Button>
         ) : (
           <div className="wallet-lock-notice" data-testid="wallet-lock-notice">
             <Wallet size={16} />
-            <span>Connect Robinhood Wallet above to unlock game entry and persistent progression</span>
+            <span>Wallet sign-in required · One-time access $1 in ETH</span>
           </div>
         )}
 

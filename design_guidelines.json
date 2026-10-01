@@ -1,141 +1,59 @@
 {
-  "theme": "dark-tactical-survival",
-  "emotional_archetype": "THE PERFORMANCE PRO / TACTICAL GRIT",
+  "component_name": "OffgameMarketModal",
+  "component_path": "/app/frontend/src/components/OffgameMarketModal.jsx",
   "typography": {
-    "title_font": "Barlow Condensed, sans-serif",
-    "display_font": "Bebas Neue, sans-serif",
-    "mono_font": "JetBrains Mono, monospace",
-    "body_font": "Barlow, sans-serif",
-    "hierarchy": {
-      "boss_title": "text-2xl sm:text-3xl font-bold tracking-tight uppercase font-['Barlow_Condensed']",
-      "boss_subtitle": "text-xs sm:text-sm font-medium tracking-widest text-[#a8b898] font-mono",
-      "warning_banner": "text-xl sm:text-2xl font-black tracking-wider text-[#ff3b30] uppercase",
-      "hud_stats": "text-xs font-mono tracking-wider"
-    }
+    "headings": "Retain existing Bebas Neue and Barlow Condensed.",
+    "body": "Retain existing JetBrains Mono and Barlow."
   },
   "colors": {
-    "background_base": "#0e1210",
-    "surface_tactical": "#141b16",
-    "surface_glass": "rgba(20, 27, 22, 0.88)",
-    "border_tactical": "rgba(115, 128, 105, 0.35)",
-    "border_highlight": "#eb705a",
-    "text_primary": "#f1f0e8",
-    "text_muted": "#8d9985",
-    "accent_danger": "#d95845",
-    "accent_laser_red": "#ff3838",
-    "accent_venom_purple": "#8b1638",
-    "accent_xenomorph_acid": "#4be3ac",
-    "accent_titan_lava": "#ff6f26",
-    "accent_lime_indicator": "#b1c994"
+    "pack_field": "Olive drab and raw steel",
+    "pack_supply": "Charcoal, faded olive, brass",
+    "pack_operator": "Deep bronze, gunmetal, gold",
+    "pack_outpost": "Dark maroon, oxidized red, hazard accents",
+    "background_match": "#18221b"
   },
-  "bosses": [
-    {
-      "id": "pico_titan",
-      "name": "Pico Gözcü Devi (Pico Blast Guardian)",
-      "hp": 5000,
-      "scale": " devasa dev robotik golem (3.8x standart oyuncu boyu)",
-      "theme_color": "#ff3838",
-      "visual_traits": "Kırmızı parlayan tek göz retikülü, omuz roketi podları, ağır metalik zırh kaplama, enerji lazer tüpü",
-      "skills": ["50m Görüş & Takip", "Lazer Işını", "Güdümlü Roket Salvosu", "Sismik Zıplama & Ezici Alan Hasarı"],
-      "spawn_badge": "BOSS 01 - WESTFALL FABRİKA ALANI"
-    },
-    {
-      "id": "carnage_venom",
-      "name": "Carnage-Venom Simbiyot Dehşeti",
-      "hp": 6000,
-      "scale": " devasa organik amorf kütle (3.5x oyuncu boyu)",
-      "theme_color": "#941634",
-      "visual_traits": "Koyu siyah-kızıl organik lifler, amorf pençeler, çeneli kafa yapısı, kaynayan sıvı parazit zemin havuzu",
-      "skills": ["Sıcak Kor Ağ Fırlatma", "Sıvı Fazına Geçerek Ani Işınlanma (Teleport)", "Yakın Pençe Boğması"],
-      "spawn_badge": "BOSS 02 - DOĞU BATAKLIK DERESİ"
-    },
-    {
-      "id": "xenomorph_prime",
-      "name": "Xenomorph Prime (Alien Hive Mother)",
-      "hp": 10000,
-      "scale": " uzun kuyruklu biyomekanik kabus (4.2x oyuncu uzunluğu)",
-      "theme_color": "#38df9f",
-      "visual_traits": "Uzun pürüzsüz kubbe kafa, biyomekanik omurga, jilet gibi bıçaklı kırbaç kuyruk, asit yeşili salya damlaları",
-      "skills": ["Uzun Mesafeli Duvar/Zemin Sıçraması", "Kırbaç Kuyruk Saplaması", "Asitli Çene Isırığı", "Zehirli Kan Sızıntısı"],
-      "spawn_badge": "BOSS 03 - KUZEY HANGAR HARABELERİ"
-    },
-    {
-      "id": "ash_titan",
-      "name": "Kül Titanı (Ash & Magma Colossus)",
-      "hp": 8000,
-      "scale": " volkanik taş devi (4.5x oyuncu boyu)",
-      "theme_color": "#ff641a",
-      "visual_traits": "Çatlamış magma gövdesi, lav sızan gözler ve omuzlar, duman/kül partikülleri, alev saçan dev yumruklar",
-      "skills": ["Tektonik Şok Dalgası", "Lava Püskürtme ve Zemin Alevi", "Volkanik Çöküş"],
-      "spawn_badge": "BOSS 04 - GÜNEY KRATERİ & MADEN"
-    }
-  ],
-  "start_screen_blueprint": {
-    "goal": "START GAME ekranında oyuna ait orijinal illüstrasyon banner'ını ve arka plan atmosferini korumak, oyunun hayatta kalma ve dev boss atmosferini vurgulamak",
-    "implementation": {
-      "banner_container": "start-game-banner: Arka plan Three.js shader tuvalinin üzerine oturan, yarı saydam taktiksel grid overlay ile harmanlanmış Deadzone devasa Boss görsel banner'ı (1200x520 oranında, köşelerinde 1px reticle ve köşe çizgileri)",
-      "reference_image": "https://customer-assets-cm19k8pv.emergentagent.net/job_community-hood/artifacts/bz8s22r8_image.png",
-      "banner_overlay": "linear-gradient(180deg, rgba(14,18,16,0.3) 0%, rgba(14,18,16,0.85) 85%, #0e1210 100%)",
-      "interactive_start_button": "Korunan mevcut START GAME butonu (.intro-start-button), banner'ın altında belirgin odak noktasında kalır",
-      "test_ids": {
-        "start_screen": "start-screen",
-        "start_banner": "start-game-banner",
-        "start_game_button": "start-game-button"
-      }
-    }
+  "visual_enhancers": {
+    "shadows": "Apply `filter: drop-shadow(0 12px 16px rgba(0,0,0,0.6))` to the newly added `<img>` elements to give them tactile physical presence.",
+    "hover_effects": "On card hover (`.ogm-package-card:hover`), subtly scale the case image by 1.05x using a smooth cubic-bezier transition. This adds a premium, interactive feel."
   },
-  "hud_boss_system_blueprint": {
-    "tactical_radar_markers": {
-      "description": "Mini haritada 4 Boss farklı ikon ve renklerle gösterilir (Pico: Kırmızı Dürbünlü Kare, Carnage: Mor/Kızıl Pençe Noktası, Xenomorph: Yeşil Baklava, Kül Titanı: Turuncu Alev Üçgeni)",
-      "boss_indicator_canvas": "Minimap 2D çiziminde boss koordinatları puls efekti ile yanıp sönen 8px halka ve yön oku ile işaretlenir"
-    },
-    "nearest_boss_health_bar": {
-      "placement": "HUD üst-orta kısımda, pusulanın hemen altında veya 120m yaklaşıldığında devreye giren Boss vitals çubuğu",
-      "elements": [
-        "Boss İsmi ve Sınıfı (Örn: 'PICO GÖZCÜ DEVİ - 5,000 / 5,000 HP')",
-        "Mesafe Rozeti (Örn: '38m - TEHLİKELİ MENZİL')",
-        "Dinamik renkli sağlık barı (Boss'un renk temasına göre gradyan)",
-        "Yetenek Saldırı Uyarısı (Örn: 'DİKKAT: LAZER KİLİTLENMESİ!', 'ŞOK DALGASI GELİYOR!')"
-      ],
-      "test_ids": {
-        "boss_health_container": "hud-boss-tracker",
-        "boss_name_label": "boss-name-label",
-        "boss_health_bar": "boss-health-bar",
-        "boss_distance_badge": "boss-distance-badge",
-        "boss_attack_warning": "boss-attack-warning"
+  "grids": "Retain existing `.ogm-packages-grid` and `.ogm-crate-mark` container definitions. Do not break the grid flow.",
+  "layouts": "To ensure cases are fully visible on both the small package cards (90x92px) and the larger detail preview (78x72px), use `width: 85%; height: 85%; object-fit: contain;` on the `<img>`. Center them with Flexbox or Grid.",
+  "motion": "Scale entrance micro-animation. Hover state should subtly enlarge the case and slightly brighten its drop shadow.",
+  "accessibility": "Ensure every injected `<img>` has an appropriate `alt` attribute (e.g., `alt=\"Field Package Case\"`). Include `data-testid` on the image tags to satisfy automated testing requirements.",
+  "media": {
+    "3d_libraries": "None. We are replacing the wireframe SVG with static 2D renders (AI generated).",
+    "image_generation_prompts": [
+      {
+        "sku": "pack_field",
+        "description": "Basic $2 Field Package",
+        "prompt": "3D render of a single brutalist military surplus field ammo crate, isometric angle, isolated on a pure #18221b background. Matte olive-drab resin mixed with raw stamped steel. Utilitarian, asymmetrical clasps. Scuffed edges. No text. Cinematic lighting, macro photography style, 85mm lens, high tension contrast."
+      },
+      {
+        "sku": "pack_supply",
+        "description": "Standard $4 Supply Package",
+        "prompt": "3D render of a single tactical supply lockbox, isometric angle, isolated on a pure #18221b background. Cold War industrial design meets modern aerospace. Dark charcoal and faded olive colors. Machined brass latches with a dull patina. Thick rubber gaskets. No text. Soft ambient studio light with a harsh gold rim light. Photorealistic, 8k."
+      },
+      {
+        "sku": "pack_operator",
+        "description": "Premium $6 Operator Package",
+        "prompt": "3D render of a high-end private military operator case, isometric angle, isolated on a pure #18221b background. Deep bronze and gunmetal tones. Mix of matte ballistic nylon texture and milled titanium. Complex, asymmetric locking dials in brushed gold. No text. Minimalist but aggressive silhouette. Studio lighting, sharp shadows."
+      },
+      {
+        "sku": "pack_outpost",
+        "description": "Elite $10 Outpost Package",
+        "prompt": "3D render of a massive command outpost armory vault case, isometric angle, isolated on a pure #18221b background. Dark maroon and oxidized steel-red finish. Brutalist architecture influence with heavy recessed blast-door latches. Asymmetrical painted hazard markings. No text. Intimidating and heavy, highly detailed, cinematic rim lighting."
       }
-    },
-    "tactical_boss_dialog": {
-      "button": "HUD sağ üst buton grubuna radar/kelle avı ikonu eklenir (Crosshair/Skull/Flame ikonu)",
-      "content": "4 Boss'un mevcut durumu (Canlı / Yeniden Doğuş Süresi sayacı: 5-10 dk), harita koordinatları ve yetenek listesini listeleyen taktik brifing paneli",
-      "test_ids": {
-        "hud_boss_dialog_button": "hud-boss-dialog-button",
-        "boss_status_dialog": "boss-status-dialog",
-        "boss_card_pico": "boss-card-pico_titan",
-        "boss_card_carnage": "boss-card-carnage_venom",
-        "boss_card_xenomorph": "boss-card-xenomorph_prime",
-        "boss_card_titan": "boss-card-ash_titan"
-      }
-    }
-  },
-  "layout_and_responsive_rules": {
-    "desktop": {
-      "boss_bar_width": "max-w-[460px] mx-auto top-[76px]",
-      "minimap_boss_pings": "Genişletilmiş 160x160 canvas'ta kenar yön okları",
-      "spacing": "p-4 ile p-6 taktik kartlar"
-    },
-    "mobile": {
-      "boss_bar_width": "calc(100% - 32px) top-[62px]",
-      "touch_safe_area": "D-Pad ve Ateş butonu çakışmayacak şekilde üst bölgede Boss barı",
-      "font_scaling": "H2 ve H3 mobile'da max 20px, etiketler 8px JetBrains Mono"
-    }
+    ]
   },
   "instructions_to_main_agent": [
-    "Do NOT alter original 3D multiplayer survival engine gameplay loop or destroy existing StartScreen button handler.",
-    "Place the static game-branded Boss banner artwork on the StartScreen behind or framing the START GAME button without obscuring the canvas shader or the button clickability.",
-    "Ensure all 4 bosses (Pico Blast robot, Carnage-Venom symbiote, Xenomorph, and Ash Titan) spawn at distinct fixed map locations at match start for testing.",
-    "Implement 5-10 minute respawn timer logic for each boss individually upon defeat.",
-    "Render clear map pings/distance vectors on the minimap and tactical compass for all 4 bosses.",
-    "Ensure every interactive and key informational element contains the specified data-testid attribute."
-  ]
+    "CRITICAL: Do NOT alter any Wagmi, Ethereum, pricing, or layout logic. Your ONLY task is replacing the SVG wireframe cubes with new static image assets.",
+    "STEP 1: Use your image-generation tool to generate 4 square assets using the exact prompts provided in `media.image_generation_prompts`.",
+    "STEP 2: The prompts request a `#18221b` background. If the resulting images have a solid dark background instead of transparency, you MUST update `.ogm-crate-mark` in `OffgameMarketModal.css` to use that exact solid background color (e.g., `background: #18221b;`) instead of its current `linear-gradient` to ensure the image blends seamlessly without a visible bounding box.",
+    "STEP 3: Save these images into a sensible static local assets folder (e.g., `frontend/src/assets/crates/`).",
+    "STEP 4: In `OffgameMarketModal.jsx`, replace the `<PackageCrate sku={sku} />` SVG component with a new functional component or raw `<img>` tag that maps the `sku` to the correct imported image.",
+    "STEP 5: Add a new CSS class for the image, e.g., `.ogm-package-img`, setting `width: 85%; height: 85%; object-fit: contain; z-index: 1; position: relative; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);`.",
+    "STEP 6: Add hover logic in `OffgameMarketModal.css`: `.ogm-package-card:hover .ogm-package-img { transform: scale(1.08) translateY(-2px); }`."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": "Do not center align the app container. No generic gradients. Keep dark tactical aesthetic consistent. Do not use AI emojis in code or UI. Ensure all elements have `data-testid` attributes. Always use physical, tactile design references instead of typical 'sci-fi slop'.",
+  "GENERAL UI UX DESIGN GUIDELINES": "Maintain optical alignment over geometrical alignment. Keep the aesthetic dark, tactical, and grounded. Micro-animations (like the subtle scale on hover) add a premium tactile feel to the interface without breaking flow. Ensure contrast ratios remain accessible. Apply tight letter spacing for headings and generous padding inside containers."
 }
