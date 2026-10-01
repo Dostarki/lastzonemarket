@@ -1,0 +1,1784 @@
+{
+  "player_accounts": [
+    {
+      "account_id": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "address": "0x55c7d12DAA84A74859E636cd53A48ceD3D3cBd88",
+      "created_at": "2026-09-30T02:03:20.750373+00:00",
+      "last_login_at": "2026-09-30T11:52:15.270794+00:00",
+      "nickname": "LastZ",
+      "normalized_nickname": "lastz",
+      "schema_version": 1,
+      "skin": "soldier"
+    }
+  ],
+  "player_progress": [
+    {
+      "account_id": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "active_soldier_ids": [
+        "soldier_1f479be5a511",
+        "soldier_178787f01ab2",
+        "soldier_f625acb14c84",
+        "soldier_3a5d8067b166"
+      ],
+      "active_soldier_tier": "soldier_s5",
+      "active_soldier_tiers": [
+        "soldier_s5",
+        "soldier_s5",
+        "soldier_s5",
+        "soldier_s5"
+      ],
+      "calibration": {
+        "calibration_t1": 51,
+        "calibration_t2": 52,
+        "calibration_t3": 50
+      },
+      "calibration_progress": {
+        "1": 0,
+        "2": 0,
+        "elite_kills": 6,
+        "boss_kills": 2
+      },
+      "consumables": {
+        "energy_drink": 7
+      },
+      "energy_drink_expires_at": 1790768442.8200717,
+      "environment": "robinhood",
+      "equipment_levels": {
+        "helmet_t1": 2,
+        "helmet_t2": 2,
+        "helmet_t3": 2,
+        "vest_t1": 2,
+        "vest_t2": 2,
+        "vest_t3": 2,
+        "legs_t1": 2,
+        "legs_t2": 2,
+        "legs_t3": 2,
+        "hands_t1": 2,
+        "hands_t2": 2,
+        "hands_t3": 2,
+        "feet_t1": 2,
+        "feet_t2": 2,
+        "feet_t3": 2,
+        "backpack_t1": 2,
+        "backpack_t2": 2,
+        "backpack_t3": 2
+      },
+      "equipment_parts": {
+        "fabric_t1": 9,
+        "fabric_t2": 65,
+        "fabric_t3": 50,
+        "plate_t1": 54,
+        "plate_t2": 51,
+        "plate_t3": 50,
+        "binding_t1": 51,
+        "binding_t2": 48,
+        "binding_t3": 51,
+        "mechanism_t1": 53,
+        "mechanism_t2": 53,
+        "mechanism_t3": 52
+      },
+      "equipped_equipment": {
+        "head": "helmet_t3",
+        "body": "vest_t3",
+        "legs": "legs_t3",
+        "hands": "hands_t3",
+        "feet": "feet_t3",
+        "backpack": "backpack_t3"
+      },
+      "equipped_weapon": "flamethrower",
+      "gold": 236646,
+      "heal_items": {
+        "medkit": 46,
+        "faid": 43
+      },
+      "inventory": {
+        "glock18": {
+          "ammo": 0,
+          "reserve": 493
+        },
+        "ak47": {
+          "ammo": 0,
+          "reserve": 0
+        },
+        "ak117": {
+          "ammo": 35,
+          "reserve": 1050
+        },
+        "ak107": {
+          "ammo": 30,
+          "reserve": 900
+        },
+        "m4": {
+          "ammo": 30,
+          "reserve": 900
+        },
+        "rocket": {
+          "ammo": 1,
+          "reserve": 50
+        },
+        "minigun": {
+          "ammo": 0,
+          "reserve": 0
+        },
+        "flamethrower": {
+          "ammo": 58,
+          "reserve": 200
+        },
+        "lava": {
+          "ammo": 5,
+          "reserve": 66
+        },
+        "shotgun": {
+          "ammo": 8,
+          "reserve": 64
+        }
+      },
+      "kills": 29,
+      "level": 50,
+      "owned_equipment": [
+        "helmet_t1",
+        "helmet_t2",
+        "helmet_t3",
+        "vest_t1",
+        "vest_t2",
+        "vest_t3",
+        "legs_t1",
+        "legs_t2",
+        "legs_t3",
+        "hands_t1",
+        "hands_t2",
+        "hands_t3",
+        "feet_t1",
+        "feet_t2",
+        "feet_t3",
+        "backpack_t1",
+        "backpack_t2",
+        "backpack_t3"
+      ],
+      "owned_soldier_tiers": [
+        "soldier_s5",
+        "soldier_s5",
+        "soldier_s5",
+        "soldier_s5",
+        "soldier_s5"
+      ],
+      "owned_soldiers": [
+        {
+          "instance_id": "soldier_178787f01ab2",
+          "tier_id": "soldier_s5",
+          "active": true,
+          "runtime": {
+            "hp": 120,
+            "ammo": 0,
+            "reserve": 0,
+            "status": "active",
+            "recovery_until_utc": 0.0
+          },
+          "nickname": "der König"
+        },
+        {
+          "instance_id": "soldier_f625acb14c84",
+          "tier_id": "soldier_s5",
+          "active": true,
+          "runtime": {
+            "hp": 120,
+            "ammo": 0,
+            "reserve": 0,
+            "status": "active",
+            "recovery_until_utc": 0.0
+          },
+          "nickname": "LastZ"
+        },
+        {
+          "instance_id": "soldier_072fbb64fc14",
+          "tier_id": "soldier_s5",
+          "active": false,
+          "runtime": {
+            "hp": 120,
+            "ammo": 0,
+            "reserve": 0,
+            "status": "active",
+            "recovery_until_utc": 0.0
+          },
+          "nickname": "fatty",
+          "current_mission_id": "54e1db71-d1e4-45ee-8970-59d0153c2d9a"
+        },
+        {
+          "instance_id": "soldier_3a5d8067b166",
+          "tier_id": "soldier_s5",
+          "active": true,
+          "runtime": {
+            "hp": 120,
+            "ammo": 0,
+            "reserve": 0,
+            "status": "active",
+            "recovery_until_utc": 0.0
+          },
+          "nickname": "pig"
+        },
+        {
+          "instance_id": "soldier_1f479be5a511",
+          "tier_id": "soldier_s5",
+          "active": true,
+          "runtime": {
+            "hp": 120,
+            "ammo": 0,
+            "reserve": 0,
+            "status": "active",
+            "recovery_until_utc": 0.0
+          },
+          "nickname": "numbnuts"
+        }
+      ],
+      "pvp": 0,
+      "revision": 4434,
+      "stat_points": 64,
+      "stats": {
+        "reload_speed": 6,
+        "movement_speed": 5,
+        "heal_multiplier": 5,
+        "max_hp": 5,
+        "stamina": 5,
+        "move_speed": 1,
+        "durability": 1,
+        "stamina_regen": 1
+      },
+      "total_score": 5300,
+      "unlocked_weapons": [
+        "glock18",
+        "ak47",
+        "ak117",
+        "ak107",
+        "m4",
+        "rocket",
+        "minigun",
+        "flamethrower",
+        "lava",
+        "shotgun"
+      ],
+      "updated_at": "2026-10-01T12:50:29.706082+00:00",
+      "weapon_parts": [
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "receiver_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_uncommon",
+          "tier": 2
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "suppressor_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "spring_common",
+          "tier": 1
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "receiver_rare",
+          "tier": 3
+        },
+        {
+          "id": "optic_rare",
+          "tier": 3
+        },
+        {
+          "id": "stock_common",
+          "tier": 1
+        },
+        {
+          "id": "grip_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        },
+        {
+          "id": "barrel_common",
+          "tier": 1
+        }
+      ],
+      "weapon_upgrades": {
+        "glock18": {
+          "damage": 3.15,
+          "range": 2.2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1,
+          "spread": 0.7
+        },
+        "ak47": {
+          "damage": 3,
+          "range": 2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1
+        },
+        "ak117": {
+          "damage": 3,
+          "range": 2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1
+        },
+        "ak107": {
+          "damage": 3,
+          "range": 2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1
+        },
+        "m4": {
+          "damage": 3,
+          "range": 2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1
+        },
+        "rocket": {
+          "damage": 3,
+          "range": 2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1
+        },
+        "minigun": {
+          "damage": 3,
+          "range": 2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1
+        },
+        "flamethrower": {
+          "damage": 3,
+          "range": 2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1
+        },
+        "lava": {
+          "damage": 3,
+          "range": 2,
+          "mag": 2,
+          "reload": 2,
+          "optic": 1,
+          "suppressor": 1
+        }
+      },
+      "weapons": {
+        "glock18": {
+          "ammo": 17,
+          "reserve": 510
+        },
+        "ak47": {
+          "ammo": 30,
+          "reserve": 900
+        },
+        "ak117": {
+          "ammo": 35,
+          "reserve": 1050
+        },
+        "ak107": {
+          "ammo": 30,
+          "reserve": 900
+        },
+        "shotgun": {
+          "ammo": 8,
+          "reserve": 320
+        },
+        "m4": {
+          "ammo": 30,
+          "reserve": 900
+        },
+        "rocket": {
+          "ammo": 1,
+          "reserve": 50
+        },
+        "minigun": {
+          "ammo": 150,
+          "reserve": 2250
+        },
+        "flamethrower": {
+          "ammo": 100,
+          "reserve": 1500
+        },
+        "lava": {
+          "ammo": 6,
+          "reserve": 180
+        }
+      },
+      "xp": 159171
+    }
+  ],
+  "auth_sessions": [
+    {
+      "session_token": "iVoUZBU77rLcoW9NItJtNhy24gnyI5i93H6jeYAAEgNYzCQH",
+      "account_id": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "address": "0x55c7d12DAA84A74859E636cd53A48ceD3D3cBd88",
+      "chain_id": 4663,
+      "created_at": "2026-09-30T02:04:31.682933+00:00",
+      "expires_at": "2026-10-07T02:04:31.682933+00:00"
+    },
+    {
+      "session_token": "CZSxtgxJ5Dke92bycTYA5lNAWQ9FuFWkMR80wFrQEoOUcX0Y",
+      "account_id": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "address": "0x55c7d12DAA84A74859E636cd53A48ceD3D3cBd88",
+      "chain_id": 4663,
+      "created_at": "2026-09-30T11:34:43.359556+00:00",
+      "expires_at": "2026-10-07T11:34:43.359556+00:00"
+    }
+  ],
+  "purchase_orders": [
+    {
+      "order_id": "a3e6dd6a-9809-4f36-aad7-2594c0596c2d",
+      "account_id": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "authenticated_wallet": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "box_results": null,
+      "cents": 200,
+      "created_at": "2026-10-01T12:50:02.185450+00:00",
+      "expires_at": "2026-10-01T13:05:02.185450+00:00",
+      "manifest": {
+        "sku": "pack_field",
+        "gold": 1000,
+        "items": {
+          "medkit": 1,
+          "faid": 2,
+          "energy_drink": 1
+        },
+        "materials": {
+          "fabric_t1": 2,
+          "plate_t1": 2,
+          "binding_t1": 2,
+          "mechanism_t1": 1
+        },
+        "weapon_parts": {
+          "barrel_common": 1,
+          "stock_common": 1
+        },
+        "equipment_to_grant": [],
+        "fallback_materials": {},
+        "badge": "SAHA",
+        "name_color": "#c8d6a0"
+      },
+      "quote": {
+        "quote_id": "d6c69561-1dba-4f6b-aac1-e60ee80057f2",
+        "chain_id": 4663,
+        "recipient": "0x3254Aea793e13b54Ad3fD2F235BC8F5a9b47a14E",
+        "usd_per_eth": "2699.405",
+        "amount_wei": "740904014032723",
+        "issued_at": "2026-10-01T12:50:02.479962+00:00",
+        "expires_at": "2026-10-01T12:53:02.479962+00:00",
+        "calldata": "4c6173745a486f6f643a61336536646436612d393830392d346633362d616164372d3235393463303539366332643a64366336393536312d316462612d346636622d616163312d653630656538303035376632"
+      },
+      "request_id": "1abf6de5-e58a-40fb-8675-d112da948028",
+      "sku": "pack_field",
+      "sku_name": "Saha Paketi",
+      "status": "awaiting_payment",
+      "usd_str": "$2"
+    },
+    {
+      "order_id": "ba46f6f2-9648-4e2d-8640-6166efa98380",
+      "account_id": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "authenticated_wallet": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "box_results": null,
+      "cents": 500,
+      "created_at": "2026-10-01T12:50:38.258575+00:00",
+      "expires_at": "2026-10-01T13:05:38.258575+00:00",
+      "manifest": {
+        "sku": "vip_30d",
+        "gold": 0,
+        "items": {},
+        "materials": {},
+        "weapon_parts": {},
+        "equipment_to_grant": [],
+        "fallback_materials": {},
+        "badge": "VIP",
+        "name_color": "#eab308"
+      },
+      "quote": {
+        "quote_id": "bae48a81-8bc0-4460-84f4-ccb5bf654c24",
+        "chain_id": 4663,
+        "recipient": "0x3254Aea793e13b54Ad3fD2F235BC8F5a9b47a14E",
+        "usd_per_eth": "2700.14",
+        "amount_wei": "1851755834882636",
+        "issued_at": "2026-10-01T12:50:38.513099+00:00",
+        "expires_at": "2026-10-01T12:53:38.513099+00:00",
+        "calldata": "4c6173745a486f6f643a62613436663666322d393634382d346532642d383634302d3631363665666139383338303a62616534386138312d386263302d343436302d383466342d636362356266363534633234"
+      },
+      "request_id": "0b7999de-18bd-4e46-93fa-671487750c94",
+      "sku": "vip_30d",
+      "sku_name": "VIP Üyelik (30 Gün)",
+      "status": "awaiting_payment",
+      "usd_str": "$5"
+    }
+  ],
+  "delivery_inbox": [],
+  "soldier_missions": [
+    {
+      "mission_id": "54e1db71-d1e4-45ee-8970-59d0153c2d9a",
+      "account_id": "0x55c7d12daa84a74859e636cd53a48ced3d3cbd88",
+      "claim_transaction_id": null,
+      "duration_seconds": 86400,
+      "end_utc": "2026-10-02T12:50:29.668914+00:00",
+      "request_id": "7e4bd847-1a8c-4a8f-b960-d1a103e61a3d",
+      "reward_gold": 650,
+      "reward_policy_version": "1.0.0",
+      "soldier_instance_id": "soldier_072fbb64fc14",
+      "soldier_name": "fatty",
+      "start_utc": "2026-10-01T12:50:29.668914+00:00",
+      "status": "active",
+      "tier_at_start": "soldier_s5"
+    }
+  ],
+  "economy_ledger": [],
+  "saved_at": "2026-10-01T13:27:26.617949+00:00"
+}

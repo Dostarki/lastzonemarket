@@ -1,0 +1,23 @@
+import { useState } from 'react';
+import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
+import { ShoppingBag } from 'lucide-react';
+import { OffgameMarketModal } from './OffgameMarketModal';
+import { useAuth } from '../lib/authContext';
+import './StartScreen.css';
+
+export const StartScreen = ({ onStart }) => {
+  const [marketOpen, setMarketOpen] = useState(false);
+  const { checkAuth } = useAuth();
+  return <section className="start-screen" data-testid="start-screen" style={{'--start-image':"url('/images/deadzone-bosses-desktop.jpg')",'--start-image-mobile':"url('/images/deadzone-bosses-mobile.jpg')"}}>
+  <picture className="start-banner" data-testid="start-banner">
+    <source media="(max-width: 767px)" srcSet="/images/deadzone-bosses-mobile.jpg" />
+    <img src="/images/deadzone-bosses-desktop.jpg" alt="Survivors and four giant bosses in Westfall" fetchPriority="high" data-testid="start-banner-image" />
+  </picture>
+  <header className="start-title"><span data-testid="start-world-name">WESTFALL</span><h1 data-testid="start-game-title">LastZHood</h1></header>
+  <Button className="intro-start-button" data-testid="start-game-button" onClick={onStart}>START GAME</Button>
+  <button className="start-market-button" onClick={() => setMarketOpen(true)}><ShoppingBag size={14} /> OPEN MARKET</button>
+  <Link to="/admin" className="start-admin-link" data-testid="start-admin-link">ADMIN</Link>
+  <OffgameMarketModal open={marketOpen} onClose={() => setMarketOpen(false)} onRefreshProfile={checkAuth} />
+</section>;
+};
